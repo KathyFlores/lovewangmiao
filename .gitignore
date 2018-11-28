@@ -1,0 +1,13 @@
+.DS_Store
+.vscode/
+*.pyc
+venv/
+__pycache__/
+.vscode/*
+*/.DS_Store
+*/.vscode/
+*/*.pyc
+venv/*
+__pycache__/*
+*/__pycache__/
+
