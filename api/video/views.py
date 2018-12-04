@@ -9,7 +9,7 @@ from api.utils.response import make_response
 def view_video_list(request):
     if request.method == 'GET':
         res_data = {'video_list': []}
-        if not request.user.is_authenticated:
+        if request.user.is_authenticated:
             for video in Video.objects.all():
                 res_data['video_list'].append(video.make_response_data(True))
             return make_response(200, 'success', '请求成功', res_data)
