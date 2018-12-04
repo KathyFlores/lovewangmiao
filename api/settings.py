@@ -25,7 +25,7 @@ SECRET_KEY = 'j9shbolgzc3f_abpct==do%v)v)2va6r#)@)1r37_z6$f95*82'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.accounts',
     'api.gifts',
+    'api.video',
 ]
 
 MIDDLEWARE = [
