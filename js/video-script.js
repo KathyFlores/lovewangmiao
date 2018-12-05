@@ -32,6 +32,9 @@
           seekStep: 5,
           enableModifiersForNumbers: false
         });
+
+        this.addClass('vjs-has-started');
+        this.trigger('firstplay');
       });
       player.on('userinactive', function() {
         if (!player.paused()) {
@@ -56,6 +59,7 @@
       });
       player.playlist(plist);
       player.playlistUi();
+      Coplayer(player);
       let name = $('.vjs-playlist-item .vjs-playlist-now-playing .vjs-playlist-name').attr('title');
       player.addChild('TitleBar', {text: name});
       $('.vjs-playlist-item').click(function() {
