@@ -1,12 +1,15 @@
 (function() {
-  $.get("/api/video", function(data, status) {
-    if(data.video_list) {
+  $.get("/api/video", function(data, status, xhr) { 
+    if (data.video_list && data.video_list.length) {
       let plist = data.video_list.map(item => {
         item.sources = [{
           src: item.url || '',
           type: 'video/mp4',
         }];
         item.poster = item.front || '';
+        item.thumbnail = [{
+          src: item.front || ''
+        }];
         return item;
       });
       const options = {
@@ -60,6 +63,10 @@
         $('.vjs-title').html(name);
       });
     }
-    
+    else {
+      alert('获取视频列表失败！');
+    }
+  }).fail(function() {
+    alert('获取视频列表失败！请检查是否登陆');
   });
 })();
