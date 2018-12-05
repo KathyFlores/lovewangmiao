@@ -65,6 +65,7 @@ body {
   background-size: 20px;
   background-repeat: no-repeat;
   transition: right 1s;
+  right: 0;
 }
 .video-wrap .video-js.vjs-paused.vjs-has-started .vjs-title-bar,
 .video-wrap .video-js.vjs-user-active.vjs-has-started .vjs-title-bar{
@@ -79,6 +80,7 @@ body {
   width: 100%;
 }
 .video-wrap .vjs-playlist {
+  width: 0;
   float: right;
   top: 0;
   position: absolute;
