@@ -18,6 +18,6 @@ from django.urls import path
 import api.accounts.views as accounts_views
 
 urlpatterns = [
-    path('login/', accounts_views.user_login),
-    path('logout/', accounts_views.user_logout),
+    path('login', accounts_views.user_login),
+    path('logout', accounts_views.user_logout),
 ]
