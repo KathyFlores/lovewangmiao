@@ -1,6 +1,9 @@
 body {
   background: black;
 }
+.video-wrap .video-js {
+  font-size: 12px !important;
+}
 .video-wrap .video-js .vjs-time-control {
   display: block;
 }
