@@ -19,7 +19,11 @@ def user_login(request):
         else:
             return make_response(401, 'unauthorized', '用户名或密码错误')
     else:
-        return make_response(404, 'page_not_found', '页面不存在')
+        if request.user.is_authenticated:
+            return make_response(200, 'success', '已登录')
+        else:
+            return make_response(401, 'unauthorized', '未登录')
 
 def user_logout(request):
-    logout(request)    
+    logout(request)
+    return make_response(200, 'success', '已登出')    
