@@ -992,7 +992,7 @@ form label {
 
 #lovewangmiao-testimonial,
 #lovewangmiao-services,
-#lovewangmiao-started,
+/*#lovewangmiao-started,*/
 #lovewangmiao-footer,
 #lovewangmiao-event,
 #lovewangmiao-timeline,
@@ -1337,7 +1337,9 @@ form label {
 }
 
 #lovewangmiao-started {
-  position: relative;
+  display:flex;
+  display: -webkit-flex; 
+  align-items:center;
 }
 #lovewangmiao-started .overlay {
   position: absolute;
