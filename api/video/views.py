@@ -1,9 +1,8 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import render
 from django.contrib.auth import authenticate
 
 from api.video.models import Video
-from api.utils.response import make_response
+from api.utils.views import make_response
 
 # Create your views here.
 def view_video_list(request):
@@ -18,4 +17,4 @@ def view_video_list(request):
                 res_data['video_list'].append(video.make_response_data(False))
             return make_response(401, 'unauthorized', '尚未登录', res_data)
     else:
-        return make_err_response(404, 'page_not_found', '页面不存在')
+        return make_response(404, 'page_not_found', '页面不存在')

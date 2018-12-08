@@ -1,13 +1,9 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
 
-from api.utils.response import make_response
+from api.utils.views import make_response
 
 # Create your views here.
-@csrf_exempt
 def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']

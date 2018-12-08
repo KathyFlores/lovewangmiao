@@ -17,10 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 
+import api.utils.views as utils_views
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/accounts/', include('api.accounts.urls')),
-    path('api/gifts/', include('api.gifts.urls')),
-    path('api/video/', include('api.video.urls')),
-    path('api/utils/', include('api.utils.urls')),
+    path('csrf_token', utils_views.get_csrf_token),
 ]

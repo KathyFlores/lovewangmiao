@@ -37,7 +37,7 @@
                     <div class="col-xs-9 text-right menu-1">
                         <ul>
                             <!-- TODO -->
-							<li class="active"><a href="index.html">Home</a></li>
+                            <li class="active"><a href="index.html">Home</a></li>
                         </ul>
                     </div>
                 </div>
@@ -102,10 +102,6 @@
 
 			</div>
 		</footer>-->
-    </div>
-
-    <div class="gototop js-top">
-        <a href="#" class="js-gotop"><img src='http://i2.bvimg.com/671237/e7d1b75333f3baa4.png'></a>
     </div>
 
     <!-- jQuery -->
@@ -173,12 +169,11 @@
         $('#login-btn').click(function () {
             var username = $('#username').val();
             var password = $('#password').val();
-            //var csrftoken = getCookie("csrftoken");
             $.ajax({
                 url: '/api/accounts/login',
                 type: 'POST',
                 data: {
-                    //"csrfmiddlewaretoken": csrftoken,
+                    'csrfmiddlewaretoken': csrf_token,
                     'username': username,
                     'password': password,
                 },
@@ -192,6 +187,22 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+			$.ajax({
+				url: '/api/utils/csrf_token',
+				type: 'GET',
+
+				success: function (json) {
+                    window.csrf_token = json['csrf_token'];
+				},
+
+				error: function (json) {
+					console.log(json);
+                    window.location.href = '/';
+				}
+			})
+		});
     </script>
 
 </body>
