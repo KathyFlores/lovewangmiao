@@ -83,18 +83,23 @@ function Coplayer(inPlayer) {
         let data = {
           local: localId,
           remote: remote.value,
+          src: player.src(),
           current: player.currentTime()
         };
         socket.emit('sync', data);
       });
       socket.on('sync', function(data){
-        console.log(data);
+        console.log('sync', data);
         if (data.errorMsg) {
           alert(data.errorMsg);
           return;
         } else if (data.remote == localId || data.local == localId) {
-          player.pause();
-          player.currentTime(data.current);
+          if (player.src() == data.src) {
+            player.pause();
+            player.currentTime(data.current);
+          } else {
+            alert('当前播放视频与对方正在播放视频不同，请先确认！');
+          }
         }
       });
       let playButton = create('button', main, {
@@ -104,17 +109,22 @@ function Coplayer(inPlayer) {
       on(playButton, 'click', () => {
         let data = {
           local: localId,
-          remote: remote.value
+          remote: remote.value,
+          src: player.src()
         };
         socket.emit('play', data);
       });
       socket.on('play', function(data){
-        console.log(data);
+        console.log('play', data);
         if (data.errorMsg) {
           alert(data.errorMsg);
           return;
         } else if (data.remote == localId || data.local == localId) {
-          player.play();
+          if (player.src() == data.src) {
+            player.play();
+          } else {
+            alert('当前播放视频与对方正在播放视频不同，请先确认！');
+          }
         }
       });
     });
