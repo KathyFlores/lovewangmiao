@@ -98,7 +98,7 @@ function Coplayer(inPlayer) {
             player.pause();
             player.currentTime(data.current);
           } else {
-            alert('当前播放视频与对方正在播放视频不同，请先确认！');
+            socket.emit('error', '当前播放视频与对方正在播放视频不同，请先确认！');
           }
         }
       });
@@ -123,10 +123,13 @@ function Coplayer(inPlayer) {
           if (player.src() == data.src) {
             player.play();
           } else {
-            alert('当前播放视频与对方正在播放视频不同，请先确认！');
+            socket.emit('error', '当前播放视频与对方正在播放视频不同，请先确认！');
           }
         }
       });
+      socket.on('error', function(msg) {
+        alert(msg);
+      })
     });
   }
   initUi();
