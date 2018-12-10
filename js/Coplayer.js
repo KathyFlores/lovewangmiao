@@ -1,6 +1,4 @@
-
 function Coplayer(inPlayer) {
-  'use strict';
   if (window !== top) {
     return;
   }
@@ -30,6 +28,10 @@ function Coplayer(inPlayer) {
     return elem;
   }
 
+  function remove(ele) {
+    ele.parentNode.removeChild(ele);
+  }
+
   function on(elem, type, listener, noStop) {
     let prefixes = ['', 'webkit', 'moz'];
     let prefix = prefixes.find(prefix => elem['on' + prefix + type] !== undefined);
@@ -43,81 +45,78 @@ function Coplayer(inPlayer) {
     }, false);
   }
 
-  function getTimeSeconds(timeStr) {
-    const arr = timeStr.split(':').reverse();
-    return (+arr[0] || 0) + (+arr[1] || 0) * 60 + (+arr[2] || 0) * 3600;
-  }
-
   var player = inPlayer;
-  var interval = null;
-
-  function handlePlay(seekTime, playTime) {
-    player.currentTime(seekTime);
-    player.pause();
-    interval = setInterval(function() {
-      let d = new Date();
-      if(!compareTime(d, playTime)) {
-        console.log("play");
-        player.play();
-        clearInterval(interval);
-      }
-    }, 300);
-  }
-
-  function compareTime(now, inputTime) {
-    const arr = inputTime.split(':');
-    if(arr.length !== 3) {
-      alert("开始播放的时间格式错误！请参考'1:20:01', '00:19:21', '00:00:38'输入！");
-      return false;
-    }
-    const nowTimeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-    return getTimeSeconds(inputTime) >= getTimeSeconds(nowTimeString);
-  }
-
-  function isPlayTimeValid(playTime) {
-    return compareTime(new Date(), playTime);
-  }
+  var socket = io();
 
   function initUi() {
-    let main = create('article', document.body, {
-      id: id,
-      className: 'article-main'
-    });
-    let local = create('input', main, {
-      id: getId('local'),
-      type: 'text',
-      placeholder: "输入视频播放时间，例如'1:20:01', '19:21', '38'"
-    });
-    on(local, 'click', () => {});
-    let remote = create('input', main, {
-      id: getId('remote'),
-      type: 'text',
-      placeholder: "输入希望视频开始播放的时间（当天），例如'22:00:00', '00:11:00'"
-    });
-    on(remote, 'click', () => {});
-    let syncBtn = create('button', main, {
-      id: getId('sync-btn'),
-      innerHTML: 'sync'
-    });
-    on(syncBtn, 'click', () => {
-      if (interval) {
-        clearInterval(interval);
+    socket.on('connect', () => {
+      if (get(id)) {
+        remove(get(id));
       }
-      const seekTime = getTimeSeconds(local.value);
-      if (seekTime > player.duration()) {
-        alert('视频播放时间超出视频时长，请重新输入！');
-        return;
-      }
-      const playTime = remote.value;
-      if (!isPlayTimeValid(playTime)) {
-        alert('当前时间已超过期望开始播放时间，请重新输入！');
-        return;
-      }
-      if (seekTime && playTime) {
-        handlePlay(seekTime, playTime);
-      } else {
-        alert('请输入视频播放时间与开始播放时间！');
-      }
+      var localId = socket.id;
+      socket.emit('online', {
+        id: localId
+      });
+      let main = create('article', document.body, {
+        id: id,
+        className: 'article-main'
+      });
+      let local = create('input', main, {
+        id: getId('local'),
+        type: 'text',
+        value: localId,
+        readOnly: true
+      });
+      on(local, 'click', () => {});
+      let remote = create('input', main, {
+        id: getId('remote'),
+        type: 'text',
+        placeholder: "输入对方ID"
+      });
+      on(remote, 'click', () => {});
+      let syncBtn = create('button', main, {
+        id: getId('sync-btn'),
+        innerHTML: 'sync'
+      });
+      on(syncBtn, 'click', () => {
+        player.pause();
+        let data = {
+          local: localId,
+          remote: remote.value,
+          current: player.currentTime()
+        };
+        socket.emit('sync', data);
+      });
+      socket.on('sync', function(data){
+        console.log(data);
+        if (data.errorMsg) {
+          alert(data.errorMsg);
+          return;
+        } else if (data.remote == localId || data.local == localId) {
+          player.pause();
+          player.currentTime(data.current);
+        }
+      });
+      let playButton = create('button', main, {
+        id: getId('play-btn'),
+        innerHTML: 'play'
+      });
+      on(playButton, 'click', () => {
+        let data = {
+          local: localId,
+          remote: remote.value
+        };
+        socket.emit('play', data);
+      });
+      socket.on('play', function(data){
+        console.log(data);
+        if (data.errorMsg) {
+          alert(data.errorMsg);
+          return;
+        } else if (data.remote == localId || data.local == localId) {
+          player.play();
+        }
+      });
     });
   }
   initUi();
