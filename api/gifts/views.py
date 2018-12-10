@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.shortcuts import render
 
-from api.utils.response import make_response
+from api.utils.views import make_response
 
 # Create your views here.
 def view_gifts(request):

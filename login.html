@@ -9,8 +9,6 @@
 
     <!-- Animate.css -->
     <link rel="stylesheet" href="css/animate.css">
-    <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="css/icomoon.css">
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -40,9 +38,6 @@
                         <ul>
                             <!-- TODO -->
                             <li class="active"><a href="index.html">Home</a></li>
-                            <li><a href="#lovewangmiao-timeline">Timeline</a></li>
-                            <li><a href="#lovewangmiao-gallery">Photos</a></li>
-                            <li><a href="">Login</a></li>
                         </ul>
                     </div>
                 </div>
@@ -107,10 +102,6 @@
 
 			</div>
 		</footer>-->
-    </div>
-
-    <div class="gototop js-top">
-        <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
     </div>
 
     <!-- jQuery -->
@@ -178,20 +169,17 @@
         $('#login-btn').click(function () {
             var username = $('#username').val();
             var password = $('#password').val();
-            //var csrftoken = getCookie("csrftoken");
             $.ajax({
-                url: "/api/accounts/login",
+                url: '/api/accounts/login',
                 type: 'POST',
                 data: {
-                    //"csrfmiddlewaretoken": csrftoken,
+                    'csrfmiddlewaretoken': csrf_token,
                     'username': username,
                     'password': password,
                 },
 
                 success: function (json) {
-                    console.log(json);
-                    console.log('登录成功');
-                    alert('登录成功');
+                    window.location.href = '/';
                 },
 
                 error: function (json) {
@@ -199,6 +187,22 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+			$.ajax({
+				url: '/api/utils/csrf_token',
+				type: 'GET',
+
+				success: function (json) {
+                    window.csrf_token = json['csrf_token'];
+				},
+
+				error: function (json) {
+					console.log(json);
+                    window.location.href = '/';
+				}
+			})
+		});
     </script>
 
 </body>
