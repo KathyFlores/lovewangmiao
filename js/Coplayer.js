@@ -84,6 +84,7 @@ function Coplayer(inPlayer) {
           local: localId,
           remote: remote.value,
           src: player.src(),
+          playbackRate: player.playbackRate(),
           current: player.currentTime()
         };
         socket.emit('sync', data);
@@ -97,6 +98,7 @@ function Coplayer(inPlayer) {
           if (player.src() == data.src) {
             player.pause();
             player.currentTime(data.current);
+            player.playbackRate(data.playbackRate);
           } else {
             socket.emit('error message', {
               local: data.local,
